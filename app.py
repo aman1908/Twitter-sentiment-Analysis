@@ -22,14 +22,7 @@ def home():
 @app.route("/result")
 def result():
 	userText1 = request.args.get('Key')
-	#print(type(userText1))
-	#print(userText1)
-	#print(str(userText1))
 	userText2 = request.args.get('Frequency')
-	#print(type(userText2))
-	#print(userText2)
-	#print(str(userText2))
-	
 	#Customer or Consumer key of twitter API 
 	customer_key = 'uzhxTPv5zDFvl2sF2U1bEF2Ts'
 	#Customer or Consumer sceret key
@@ -44,15 +37,13 @@ def result():
 	api = tweepy.API(auth)
 
 	results = api.search(q=userText1,count=userText2)
-	#print(results)
-	# We add the additional step of iterating through the list of sentences and calculating and printing polarity scores for each one.
+	#Polarity scores
 	polarity = []
 	positive = []
 	negative = []
 	neutral = []
 	for i in results:
 		i.text
-		print(i)
 		analysis = TextBlob(i.text)
 		polarity.append(analysis.sentiment[0])
 	for i in range(0,len(polarity)):
@@ -62,13 +53,7 @@ def result():
 		negative.append(polarity[i])
 	    else:
 		neutral.append(polarity[i])
-	#print(polarity)
-	#print(positive)
-	#print(negative)
-	#print(neutral)
 	result = [len(positive),len(negative),len(neutral),len(polarity)]
-	#print(type(result))
-	#print(result)
 	labels=["pos","neg","neu","pol"]
 	labels_graph=[i for i in labels]
 	result_graph=[i for i in result]
@@ -77,7 +62,7 @@ def result():
         bar_chart = pygal.Bar(width=1200, height=600,explicit_size=True, title=title, style=DarkSolarizedStyle)
         bar_chart.x_labels = labels_graph
         bar_chart.add('Temps in F', result_graph)
-
+	#Create a pie chart
 	pie_chart = pygal.Pie(style=DarkSolarizedStyle)
 	pie_chart.add(labels[0], result[0])
 	pie_chart.add(labels[1], result[1])
